@@ -1,0 +1,38 @@
+/* Checkbox text to always show on-screen keyboard */
+"4UX-80-0Vo.title" = "إظهار لوحة المفاتيح على الشاشة دائماً";
+
+/* Checkbox text to enable verbose Console logging */
+"7J6-zy-R20.title" = "استخدم التسجيل المفصّل في نافذة الأوامر";
+
+/* Support button text  */
+"93O-x6-RLF.label" = "الدعم";
+
+/* Download Keyboard button text */
+"CTw-kf-WNS.title" = "تحميل لوحة مفاتيح...";
+
+/* Keyman Configuration window title */
+"F0z-JX-Cv5.title" = "تكوين Keyman";
+
+/* button text to go back to previous page */
+"JOK-JV-n8w.title" = "عودة";
+
+/* Keyboards button text */
+"MPN-9N-wWc.label" = "لوحات مفاتيح";
+
+/* text to explain verbose Console logging option */
+"MrI-GM-7d6.title" = "عند استخدام خيار التسجيل المفصل، سيقوم Keyman بتسجيل الأنشطة التي تساعد قسم الدعم بتشخيص المشكلة. يمكن لتطبيق نافذة الأوامر أن يستخدم لمشاهدة سجل الرسائل من Keyman. ضمن نافذة الأوامر، يمكنك استخدام الفلتر لإظهار جميع الرسائل من عملية \"Keyman\" ويمكن تصدير هذا السجل وإرساله إلى دعم Keyman في حال دعت الحاجة.";
+
+/* button text to move forward to the next page */
+"eXr-8V-h1g.title" = "التالي";
+
+/* button text to return to the home help page */
+"fXS-aC-CMH.title" = "الرئيسية";
+
+/* Options button text */
+"frd-No-seV.label" = "خيارات";
+
+/* Installed Keyboard column heading */
+"jex-Nd-Qzg.headerCell.title" = "لوحة مفاتيح مثبتة";
+
+/* Verbose logging tooltip text */
+"uWx-3J-U0D.ibShadowedToolTip" = "فعّل هذا الخيار إذا كنت تواجه مشاكل متعلقة بلوحة مفاتيح معينة أو مع تطبيق Keyman بشكل عام.";
