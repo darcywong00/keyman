@@ -2,7 +2,6 @@ package com.keyman.engine.cloud.impl;
 
 import com.keyman.engine.cloud.CloudApiTypes;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -30,13 +29,11 @@ public class CloudCatalogDownloadReturns {
     this.packagesJSON = pkg;
   }
 
-  public CloudCatalogDownloadReturns(JSONObject keyboardJSON, JSONArray lexicalModelJSON, JSONObject packagesJSON) {
+  public CloudCatalogDownloadReturns(JSONObject packagesJSON) {
     this.packagesJSON = packagesJSON;
   }
 
   public boolean isEmpty() {
-    boolean emptyPkg = packagesJSON == null || packagesJSON.length() == 0;
-
-    return emptyPkg;
+    return packagesJSON == null || packagesJSON.length() == 0;
   }
 }

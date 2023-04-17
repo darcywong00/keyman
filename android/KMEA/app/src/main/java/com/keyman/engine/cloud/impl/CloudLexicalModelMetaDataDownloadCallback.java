@@ -130,7 +130,7 @@ public class CloudLexicalModelMetaDataDownloadCallback implements ICloudDownload
         //handleKeyboardMetaData(_r);
       }
       if (_r.returnjson.target == CloudApiTypes.ApiTarget.KeyboardLexicalModels) {
-        processCloudResultForModel(aContext, _r);
+        processCloudResultForModel(_r);
       }
 
       if (_r.returnjson.target == CloudApiTypes.ApiTarget.PackageVersion) {
@@ -145,7 +145,7 @@ public class CloudLexicalModelMetaDataDownloadCallback implements ICloudDownload
     }
   }
 
-  private void processCloudResultForModel(Context aContext, MetaDataResult _r) {
+  private void processCloudResultForModel(MetaDataResult _r) {
     JSONArray lmData = _r.returnjson.jsonArray;
     if (lmData == null || lmData.length() == 0) {
       // Not an error if api.keyman.com returns empty array of associated lexical models

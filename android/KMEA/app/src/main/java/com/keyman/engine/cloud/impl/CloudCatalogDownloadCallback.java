@@ -6,17 +6,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.keyman.engine.BaseActivity;
-import com.keyman.engine.KeyboardPickerActivity;
 import com.keyman.engine.R;
 import com.keyman.engine.cloud.CloudApiTypes;
 import com.keyman.engine.cloud.CloudDataJsonUtil;
 import com.keyman.engine.cloud.ICloudDownloadCallback;
 import com.keyman.engine.data.CloudRepository;
 import com.keyman.engine.data.Dataset;
-import com.keyman.engine.data.Keyboard;
 import com.keyman.engine.data.KeyboardController;
 import com.keyman.engine.data.LanguageResource;
-import com.keyman.engine.data.LexicalModel;
 import com.keyman.engine.util.FileUtils;
 import com.keyman.engine.util.VersionUtils;
 
@@ -53,20 +50,14 @@ public class CloudCatalogDownloadCallback implements ICloudDownloadCallback<Data
     this.context = context;
 
 
-    Runnable dummy = new Runnable() {
-      public void run() {
-        // Do nothing.
-      }
+    Runnable dummy = () -> {
+      // Do nothing.
     };
     this.querySuccess = success != null ? success : dummy;
     this.failure = failure != null ? failure : dummy;
 
-    this.updateHandler = updateHandler != null ? updateHandler : new CloudRepository.UpdateHandler() {
-      @Override
-      public void onUpdateDetection(List<Bundle> updateBundles) {
-        // Do nothing.
-        return;
-      }
+    this.updateHandler = updateHandler != null ? updateHandler : updateBundles -> {
+      // Do nothing.
     };
   }
   private Bundle updateCheck(LanguageResource cloudResource, LanguageResource existingMatch) {
@@ -111,7 +102,7 @@ public class CloudCatalogDownloadCallback implements ICloudDownloadCallback<Data
   }
 
 
-    private JSONArray ensureInit(Context aContext,Dataset aDataSet, JSONArray json) {
+    private JSONArray ensureInit(Dataset aDataSet, JSONArray json) {
     if (json == null && aDataSet.isEmpty()) {
       BaseActivity.makeToast(context, R.string.cannot_connect, Toast.LENGTH_SHORT);
       handleDownloadError();
@@ -121,7 +112,7 @@ public class CloudCatalogDownloadCallback implements ICloudDownloadCallback<Data
     return (json != null) ? json : new JSONArray();
   }
 
-   private JSONObject ensureInit(Context aContext,Dataset aDataSet, JSONObject json) {
+   private JSONObject ensureInit(Dataset aDataSet, JSONObject json) {
     if (json == null && aDataSet.isEmpty()) {
       BaseActivity.makeToast(context, R.string.cannot_connect, Toast.LENGTH_SHORT);
       handleDownloadError();
@@ -131,9 +122,9 @@ public class CloudCatalogDownloadCallback implements ICloudDownloadCallback<Data
     return (json != null) ? json : new JSONObject();
   }
 
-  protected void ensureInitCloudReturn(Context aContext, Dataset aDataSet, CloudCatalogDownloadReturns jsonTuple)
+  protected void ensureInitCloudReturn(Dataset aDataSet, CloudCatalogDownloadReturns jsonTuple)
   {
-    jsonTuple.packagesJSON = ensureInit(aContext, aDataSet, jsonTuple.packagesJSON);
+    jsonTuple.packagesJSON = ensureInit(aDataSet, jsonTuple.packagesJSON);
   }
 
   public void processCloudReturns(Dataset aDataSet, CloudCatalogDownloadReturns jsonTuple, boolean executeCallbacks) {
@@ -144,9 +135,6 @@ public class CloudCatalogDownloadCallback implements ICloudDownloadCallback<Data
       return;
     }
 
-    final boolean fromKMP = false;
-
-    Dataset installedData = KeyboardPickerActivity.getInstalledDataset(context);
     final List<Bundle> updateBundles = new ArrayList<>();
 
     // We're about to do a big batch of edits.
@@ -184,7 +172,7 @@ public class CloudCatalogDownloadCallback implements ICloudDownloadCallback<Data
   {
     saveDataToCache(aCloudResult);
 
-    ensureInitCloudReturn(aContext,aDataSet,aCloudResult);
+    ensureInitCloudReturn(aDataSet,aCloudResult);
 
     processCloudReturns(aDataSet, aCloudResult,true);
 

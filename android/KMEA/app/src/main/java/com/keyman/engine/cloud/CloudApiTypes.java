@@ -157,7 +157,6 @@ public class CloudApiTypes {
 
       if (data != null) {
         DownloadFileUtils.Info info = DownloadFileUtils.cacheDownloadFile(context, data);
-        String filename = info.getFilename();
         cachedFile = info.getFile();
       }
 
