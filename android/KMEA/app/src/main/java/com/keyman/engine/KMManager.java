@@ -56,10 +56,6 @@ import android.widget.RelativeLayout;
 
 import androidx.core.content.ContextCompat;
 
-import io.sentry.Breadcrumb;
-import io.sentry.Sentry;
-import io.sentry.SentryLevel;
-
 import com.keyman.engine.KeyboardEventHandler.OnKeyboardDownloadEventListener;
 import com.keyman.engine.KeyboardEventHandler.OnKeyboardEventListener;
 import com.keyman.engine.cloud.CloudDownloadMgr;
@@ -1429,20 +1425,8 @@ public final class KMManager {
     keyboardInfo.setNewKeyboard(true);
 
     // Log Sentry analytic event, ignoring default keyboard
-    if (DependencyUtil.libraryExists(LibraryType.SENTRY) && Sentry.isEnabled() && !(packageID.equalsIgnoreCase(KMManager.KMDefault_PackageID) &&
-      keyboardID.equalsIgnoreCase(KMManager.KMDefault_KeyboardID))) {
-      Breadcrumb breadcrumb = new Breadcrumb();
-      breadcrumb.setMessage("KMManager.addKeyboard");
-      breadcrumb.setCategory("addKeyboard");
-      breadcrumb.setLevel(SentryLevel.INFO);
-      breadcrumb.setData("packageID", packageID);
-      breadcrumb.setData("keyboardID", keyboardID);
-      breadcrumb.setData("keyboardName", keyboardInfo.getKeyboardName());
-      breadcrumb.setData("keyboardVersion", keyboardInfo.getVersion());
-      breadcrumb.setData("languageID", keyboardInfo.getLanguageID());
-      breadcrumb.setData("languageName", keyboardInfo.getLanguageName());
-
-      Sentry.addBreadcrumb(breadcrumb);
+    if (!(packageID.equalsIgnoreCase(KMManager.KMDefault_PackageID) && keyboardID.equalsIgnoreCase(KMManager.KMDefault_KeyboardID))) {
+      KMLog.LogBreadcrumb("addKeyboard", keyboardInfo);
 
       // For now, not sending a Sentry.captureMessage()
       // This means the breadcrumb won't get sent until a crash happens.
@@ -1532,6 +1516,7 @@ public final class KMManager {
 
     registerAssociatedLexicalModel(languageID);
 
+    KMLog.LogBreadcrumb("setKeyboard", keyboardInfo);
     return (result1 || result2);
   }
 

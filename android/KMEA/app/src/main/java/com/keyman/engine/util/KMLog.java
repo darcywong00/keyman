@@ -7,17 +7,43 @@ package com.keyman.engine.util;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.keyman.engine.data.Keyboard;
 import com.keyman.engine.BaseActivity;
 import com.keyman.engine.BuildConfig;
 import com.keyman.engine.KMManager;
 import com.keyman.engine.util.DependencyUtil;
 import com.keyman.engine.util.DependencyUtil.LibraryType;
 
+import io.sentry.Breadcrumb;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 
 public final class KMLog {
   private static final String TAG = "KMLog";
+
+  /**
+   * Utility to log breadcrumb to Sentry
+   * @param category String of the breadcrumb category
+   * @param keyboardInfo Keyboard
+   */
+  public static void LogBreadcrumb(String category, Keyboard keyboardInfo) {
+    if (keyboardInfo != null) {
+      if (DependencyUtil.libraryExists(LibraryType.SENTRY) && Sentry.isEnabled()) {
+        Breadcrumb breadcrumb = new Breadcrumb();
+        breadcrumb.setMessage("KMManager.addKeyboard");
+        breadcrumb.setCategory(category);
+        breadcrumb.setLevel(SentryLevel.INFO);
+        breadcrumb.setData("packageID", keyboardInfo.getPackageID());
+        breadcrumb.setData("keyboardID", keyboardInfo.getKeyboardID());
+        breadcrumb.setData("keyboardName", keyboardInfo.getKeyboardName());
+        breadcrumb.setData("keyboardVersion", keyboardInfo.getVersion());
+        breadcrumb.setData("languageID", keyboardInfo.getLanguageID());
+        breadcrumb.setData("languageName", keyboardInfo.getLanguageName());
+
+        Sentry.addBreadcrumb(breadcrumb);
+      }
+    }
+  }
 
   /**
    * Utility to log info and send to Sentry
