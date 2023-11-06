@@ -33,6 +33,7 @@ import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.widget.FrameLayout;
 
+import java.io.InputStream;
 import io.sentry.android.core.SentryAndroid;
 import io.sentry.Sentry;
 
@@ -71,7 +72,20 @@ public class SystemKeyboard extends InputMethodService implements OnKeyboardEven
     KMManager.SpacebarText spacebarText = KMManager.SpacebarText.fromString(prefs.getString(KeymanSettingsActivity.spacebarTextKey, KMManager.SpacebarText.LANGUAGE_KEYBOARD.toString()));
     KMManager.setSpacebarText(spacebarText);
 
-    KMManager.setBannerImage(KeyboardType.KEYBOARD_TYPE_SYSTEM, KMManager.KM_BANNER_THEME_KEYMAN);
+    String bannerLine = "";
+    try {
+      InputStream is = getApplicationContext().getAssets().open("svg/banner.svg");
+      int size = is.available();
+      byte[] buffer = new byte[size];
+      is.read(buffer);
+      is.close();
+      bannerLine = new String(buffer, "UTF-8");
+    } catch (Exception e) {
+
+    }
+
+    KMManager.setBannerImage(KeyboardType.KEYBOARD_TYPE_SYSTEM, bannerLine);
+    //KMManager.setBannerImage(KeyboardType.KEYBOARD_TYPE_SYSTEM, KMManager.KM_BANNER_THEME_KEYMAN);
     KMManager.setBanner(KeyboardType.KEYBOARD_TYPE_SYSTEM, KMManager.BannerType.IMAGE);
 
     boolean mayHaveHapticFeedback = prefs.getBoolean(KeymanSettingsActivity.hapticFeedbackKey, false);
