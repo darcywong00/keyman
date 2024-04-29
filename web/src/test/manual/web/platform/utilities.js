@@ -6,6 +6,6 @@ function loadKeyboards()
     languages:{
       id:'en',name:'English',region:'North America'
     },
-    filename:'platformtest.js'
+    filename:'../../../../../../common/test/keyboards/platformtest/binary/platformtest.js'
   });
 }
