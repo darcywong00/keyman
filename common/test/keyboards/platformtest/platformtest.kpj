@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <KeymanDeveloperProject>
   <Options>
-    <BuildPath></BuildPath>
-    <CompilerWarningsAsErrors>False</CompilerWarningsAsErrors>
-    <WarnDeprecatedCode>True</WarnDeprecatedCode>
+    <BuildPath>$PROJECTPATH\build</BuildPath>
+    <CompilerWarningsAsErrors>True</CompilerWarningsAsErrors>
   </Options>
   <Files>
     <File>
       <ID>id_c1593d698cb624690005787147089dab</ID>
       <Filename>platformtest.kmn</Filename>
-      <Filepath>platformtest.kmn</Filepath>
+      <Filepath>source\platformtest.kmn</Filepath>
       <FileVersion>1.0</FileVersion>
       <FileType>.kmn</FileType>
       <Details>
@@ -19,7 +18,7 @@
     <File>
       <ID>id_18e336f9ad890bf821ff56e1a7764478</ID>
       <Filename>platformtest.kps</Filename>
-      <Filepath>platformtest.kps</Filepath>
+      <Filepath>source\platformtest.kps</Filepath>
       <FileVersion></FileVersion>
       <FileType>.kps</FileType>
       <Details>
@@ -27,17 +26,17 @@
       </Details>
     </File>
     <File>
-      <ID>id_61f04814d427ce02953436f3ea7d7a65</ID>
+      <ID>id_bc04767f8a14f58a960c9778777cc32f</ID>
       <Filename>PlatformTest.kmx</Filename>
-      <Filepath>PlatformTest.kmx</Filepath>
+      <Filepath>source\PlatformTest.kmx</Filepath>
       <FileVersion></FileVersion>
       <FileType>.kmx</FileType>
       <ParentFileID>id_18e336f9ad890bf821ff56e1a7764478</ParentFileID>
     </File>
     <File>
-      <ID>id_4c181ba69e04d1b060584cc3097e7e45</ID>
+      <ID>id_63eb39f23c24e83a7a843858db57c96d</ID>
       <Filename>platformtest.js</Filename>
-      <Filepath>platformtest.js</Filepath>
+      <Filepath>source\platformtest.js</Filepath>
       <FileVersion></FileVersion>
       <FileType>.js</FileType>
       <ParentFileID>id_18e336f9ad890bf821ff56e1a7764478</ParentFileID>
