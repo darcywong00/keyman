@@ -18,6 +18,10 @@ android {
         noCompress "kmp"
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId "com.tavultesoft.kmapro"
         minSdkVersion 21
