@@ -3,7 +3,7 @@ plugins {
     id 'io.sentry.android.gradle'
     // https://github.com/Triple-T/gradle-play-publisher/issues/947#issuecomment-843634852
     id 'com.github.triplet.play' version '3.9.1' apply false
-    id 'name.remal.default-plugins'
+    //id 'name.remal.default-plugins'
 }
 
 ext.rootPath = '../../'
@@ -20,6 +20,11 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     defaultConfig {
