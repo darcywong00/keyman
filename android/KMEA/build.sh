@@ -37,7 +37,7 @@ builder_parse "$@"
 if builder_is_debug_build; then
   builder_heading "### Debug config ####"
   CONFIG="debug"
-  BUILD_FLAGS="assembleDebug -x lint -x test"
+  BUILD_FLAGS="assembleDebug -x lint -x test" #  --warning-mode all --stacktrace"
   TEST_FLAGS="-x assembleDebug lintDebug testDebug"
   JUNIT_RESULTS="##teamcity[importData type='junit' path='keyman\android\KMEA\app\build\test-results\testDebugUnitTest\']"
 fi
