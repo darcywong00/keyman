@@ -49,23 +49,23 @@ public class MainActivity extends AppCompatActivity implements OnKeyboardDownloa
 
         setContentView(R.layout.activity_main);
 
+        if (BuildConfig.DEBUG) {
+            KMManager.setDebugMode(true);
+        }
+        KMManager.initialize(getApplicationContext(), KMManager.KeyboardType.KEYBOARD_TYPE_INAPP);
+
         FVShared.getInstance().initialize(this);
 
         FVShared.getInstance().upgradeTo12();
         FVShared.getInstance().upgradeTo14();
         FVShared.getInstance().preloadPackages();
 
-        if (BuildConfig.DEBUG) {
-            KMManager.setDebugMode(true);
-        }
-        KMManager.initialize(getApplicationContext(), KMManager.KeyboardType.KEYBOARD_TYPE_INAPP);
-
-        /**
-         * We need to set the default (fallback) keyboard to sil_euro_latin inside the fv_all package
-         * rather than the normal default of sil_euro_latin inside the sil_euro_latin package.
-         * Fallback keyboard needed in case the user never selects a FV keyboard to add
-         * as a system keyboard.
-        */
+      /**
+       * We need to set the default (fallback) keyboard to sil_euro_latin inside the fv_all package
+       * rather than the normal default of sil_euro_latin inside the sil_euro_latin package.
+       * Fallback keyboard needed in case the user never selects a FV keyboard to add
+       * as a system keyboard.
+      */
         String version = KMManager.getLatestKeyboardFileVersion(
             context, FVShared.FVDefault_PackageID, KMManager.KMDefault_KeyboardID);
         KMManager.setDefaultKeyboard(

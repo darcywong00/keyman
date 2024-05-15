@@ -30,6 +30,8 @@ final class FVShared {
     private static FVShared instance = null;
     private boolean isInitialized = false;
 
+    // File containing Region info for each keyboard
+    private static final String FVKeyboards_CSV = "keyboards.csv";
     private static final String FVLoadedKeyboardList = "loaded_keyboards.dat";
 
     // Keys from earlier versions of app, used only in the upgrade process
@@ -59,6 +61,16 @@ final class FVShared {
             this.lgId = lgId;
             this.lgName = lgName;
         }
+
+        FVKeyboard(String id, String name, String version, String lgId, String lgName) {
+          this.id = id;
+          this.name = name;
+          this.legacyId = id;
+          this.version = version;
+          this.lgId = lgId;
+          this.lgName = lgName;
+        }
+
     }
 
     static class FVKeyboardList extends ArrayList<FVKeyboard> {
@@ -125,39 +137,62 @@ final class FVShared {
 
   private FVRegionList loadRegionList() {
         FVRegionList list = new FVRegionList();
+        File resourceRoot = new File(getResourceRoot());
+        PackageProcessor kmpProcessor = new PackageProcessor(resourceRoot);
+        File csvFile = new File(getPackagesDir() + FVDefault_PackageID + File.separator + FVKeyboards_CSV);
+        if (!csvFile.exists()) {
+          return list;
+        }
         try {
-            // At this point in initialization, fv_all.kmp hasn't been extracted, so
-            // we get all the keyboard info from keyboards.csv
-            InputStream inputStream = context.getAssets().open("keyboards.csv");
+            // At this point in initialization, fv_all.kmp is now extracted, so
+            // merge the keyboard info with the Regions from keyboards.csv
+            //InputStream inputStream = context.getAssets().open("keyboards.csv");
+            InputStream inputStream = new FileInputStream(csvFile);
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
             reader.readLine(); // skip header row
             String line = reader.readLine();
 
             while (line != null) {
-                while (line.contains(",,"))
-                    line = line.replace(",,", ", ,");
+                while (line.contains(",,")) {
+                  line = line.replace(",,", ", ,");
+                }
 
                 String[] values = line.split(",");
                 if (values != null && values.length > 0) {
                     // Read in column info
-                    String kbId = values[1];
-                    String kbName = values[2];
-                    String regionName = values[3];
-                    String legacyId = values[4];
-                    String version = values[5];
-                    String lgId = values[6].toLowerCase(); // Normalize language ID
-                    String lgName = values[7];
+                    String kbId = values[0];
+                    String regionName = values[1];
 
                     FVRegion region = list.findRegion(regionName);
                     if(region == null) {
-                        region = new FVRegion(regionName);
-                        list.add(region);
+                      region = new FVRegion(regionName);
+                      list.add(region);
                     }
 
-                    FVKeyboard keyboard = new FVKeyboard(kbId, kbName, legacyId, version, lgId, lgName);
+                    Keyboard kbd = kmpProcessor.getKeyboard(
+                      FVDefault_PackageID,
+                      kbId,
+                      null); // get first associated language ID
+                    if (kbd != null) {
+                      // Override European keyboard info
+                      if (kbId.equalsIgnoreCase("sil_euro_latin")) {
+                        kbd.setResourceName("English");
+                        kbd.setLanguage("en", "English");
+                      } else if (kbId.equalsIgnoreCase("basic_kbdcan")) {
+                        kbd.setResourceName("Français");
+                        kbd.setLanguage("fr-ca", "French");
+                      }
 
-                    region.keyboards.add(keyboard);
+                      FVKeyboard keyboard = new FVKeyboard(
+                        kbId,
+                        kbd.getKeyboardName(),
+                        kbd.getVersion(),
+                        kbd.getLanguageID().toLowerCase(), // Normalize language ID
+                        kbd.getLanguageName());
+
+                      region.keyboards.add(keyboard);
+                    }
                 }
 
                 line = reader.readLine();
