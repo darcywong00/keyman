@@ -42,6 +42,10 @@ public abstract class LanguageResource implements Serializable {
 
   public String getResourceName() { return resourceName; }
 
+  public void setResourceName(String resourceName) {
+    this.resourceName = resourceName;
+  }
+
   public String getLanguageID() { return languageID; }
 
   // Deprecated in Keyman 14.0 by getLanguageID();
