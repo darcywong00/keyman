@@ -64,7 +64,6 @@ if builder_start_action configure; then
   KEYBOARD_PACKAGE_ID="fv_all"
   KEYBOARDS_TARGET="$KEYMAN_ROOT/oem/firstvoices/android/app/src/main/assets/${KEYBOARD_PACKAGE_ID}.kmp"
 
-  # Don't commit to production
   downloadKeyboardPackage "$KEYBOARD_PACKAGE_ID" "$KEYBOARDS_TARGET"
 
   builder_finish_action success configure
