@@ -26,7 +26,9 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Insets;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.inputmethodservice.InputMethodService;
 import android.net.ConnectivityManager;
@@ -41,6 +43,7 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
 import android.view.inputmethod.EditorInfo;
@@ -2084,11 +2087,22 @@ public final class KMManager {
       wm.getDefaultDisplay().getSize(size);
       return size;
     }
-    
-    WindowMetrics windowMetrics = wm.getCurrentWindowMetrics();
-    return new Point(
-      windowMetrics.getBounds().width(),
-      windowMetrics.getBounds().height());    
+
+    // From https://developer.android.com/reference/android/view/WindowMetrics#getBounds()
+    final WindowMetrics metrics = wm.getCurrentWindowMetrics();
+    // Gets all excluding insets
+    final WindowInsets windowInsets = metrics.getWindowInsets();
+    Insets insets = windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars()
+      | WindowInsets.Type.displayCutout());
+
+    int insetsWidth = insets.right + insets.left;
+    int insetsHeight = insets.top + insets.bottom;
+
+    // Legacy size that Display#getSize reports
+    final Rect bounds = metrics.getBounds();
+    final Point legacySize = new Point(bounds.width() - insetsWidth,
+      bounds.height() - insetsHeight);
+    return legacySize;
   }
 
   public static float getWindowDensity(Context context) {

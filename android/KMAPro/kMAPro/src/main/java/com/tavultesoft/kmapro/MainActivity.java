@@ -604,6 +604,10 @@ public class MainActivity extends BaseActivity implements OnKeyboardEventListene
       statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
     Point size = KMManager.getWindowSize(context);
+    Log.d(TAG, String.format("getWindowSize: (%d, %d)", size.x, size.y));
+    float density = KMManager.getWindowDensity(context);
+    Log.d(TAG, String.format("getWindowDensity: %f", density));
+
     int screenHeight = size.y;
     Log.d(TAG, "Main resizeTextView bannerHeight: " + bannerHeight);
     textView.setHeight(screenHeight - statusBarHeight - actionBarHeight - bannerHeight - keyboardHeight);
