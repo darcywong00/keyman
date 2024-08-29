@@ -192,6 +192,17 @@ public final class KMManager {
     DEFAULT,   // Default ENTER action
   }
 
+  // Enum for whether the suggestion banner allows predictions, corrections, auto-corrections
+  public enum SuggestionType {
+    // Suggestion Disabled - No Predictions, No corrections, No auto-corrections
+    NO_SUGGESTIONS,
+
+    // Suggestions Enabled
+    PREDICTIONS_ONLY,             // Predictions with no corrections
+    PREDICTIONS_AND_CORRECTIONS,  // Predictions with corrections
+    PREDICTIONS_AND_AUTO_CORRECT, // Predictions with auto-corrections
+  }
+
   protected static InputMethodService IMService;
 
   private static boolean debugMode = false;
@@ -220,6 +231,7 @@ public final class KMManager {
 
   public final static String predictionPrefSuffix = ".mayPredict";
   public final static String correctionPrefSuffix = ".mayCorrect";
+  public final static String autoCorrectionPrefSuffix = ".mayAutoCorect";
 
   // Special override for when the keyboard may have haptic feedback when typing.
   // haptic feedback disabled for hardware keystrokes
@@ -705,6 +717,10 @@ public final class KMManager {
 
   public static String getLanguageCorrectionPreferenceKey(String langID) {
     return langID + correctionPrefSuffix;
+  }
+
+  public static String getLanguageAutoCorrectionPreferenceKey(String langID) {
+    return langID + autoCorrectionPrefSuffix;
   }
 
   public static void hideSystemKeyboard() {
@@ -1467,19 +1483,20 @@ public final class KMManager {
     boolean mayPredict = (mayPredictOverride) ? false :
       prefs.getBoolean(getLanguagePredictionPreferenceKey(languageID), true);
     boolean mayCorrect = prefs.getBoolean(getLanguageCorrectionPreferenceKey(languageID), true);
+    boolean mayAutoCorrect = prefs.getBoolean(getLanguageAutoCorrectionPreferenceKey(languageID), true);
 
     RelativeLayout.LayoutParams params;
     if (isKeyboardLoaded(KeyboardType.KEYBOARD_TYPE_INAPP) && !InAppKeyboard.shouldIgnoreTextChange() && modelFileExists) {
       params = getKeyboardLayoutParams();
 
       // Do NOT re-layout here; it'll be triggered once the banner loads.
-      InAppKeyboard.loadJavascript(KMString.format("enableSuggestions(%s, %s, %s)", model, mayPredict, mayCorrect));
+      InAppKeyboard.loadJavascript(KMString.format("enableSuggestions(%s, %s, %s, %s)", model, mayPredict, mayCorrect, mayAutoCorrect));
     }
     if (isKeyboardLoaded(KeyboardType.KEYBOARD_TYPE_SYSTEM) && !SystemKeyboard.shouldIgnoreTextChange() && modelFileExists) {
       params = getKeyboardLayoutParams();
 
       // Do NOT re-layout here; it'll be triggered once the banner loads.
-      SystemKeyboard.loadJavascript(KMString.format("enableSuggestions(%s, %s, %s)", model, mayPredict, mayCorrect));
+      SystemKeyboard.loadJavascript(KMString.format("enableSuggestions(%s, %s, %s, %s)", model, mayPredict, mayCorrect, mayAutoCorrect));
     }
     return true;
   }

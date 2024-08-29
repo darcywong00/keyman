@@ -68,6 +68,25 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">normal</item>
-  </style>
-    
+    </style>
+
+    <!-- parent="@style/Widget.Material3.Slider" -->
+    <style name="SliderStyle" parent="@style/Widget.Material3.Slider">
+        <item name="labelStyle">@style/TooltipStyle</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Slider</item>
+    </style>
+
+    <style name="TooltipStyle" parent="Widget.MaterialComponents.Tooltip">
+        <!-- background color of the Tooltip -->
+        <item name="backgroundTint">@android:color/white</item>
+    </style>
+
+    <style name="ThemeOverlay.Slider" parent="">
+        <!-- color used by the text in the Tooltip -->
+        <item name="thumbColor">@android:color/holo_blue_dark</item>
+        <item name="colorOnPrimary">@android:color/holo_blue_dark</item>
+        <item name="colorOnBackground">@android:color/white</item>
+        <item name="colorSurface">@android:color/black</item>
+    </style>
+
 </resources>

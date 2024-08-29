@@ -229,12 +229,14 @@ function deregisterModel(modelID) {
   keyman.removeModel(modelID);
 }
 
-function enableSuggestions(model, mayPredict, mayCorrect) {
+function enableSuggestions(model, mayPredict, mayCorrect, mayAutoCorrect) {
   // Set the options first so that KMW's ModelManager can properly handle model enablement states
   // the moment we actually register the new model.
   keyman.core.languageProcessor.mayPredict = mayPredict;
   keyman.core.languageProcessor.mayCorrect = mayCorrect;
 
+  // TODO
+  // keyman.core.languageProcessor.mayAutoCorrect = mayAutoCorrect;
   registerModel(model);
 }
 

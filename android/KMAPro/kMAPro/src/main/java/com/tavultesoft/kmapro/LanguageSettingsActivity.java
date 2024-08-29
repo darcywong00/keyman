@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.slider.Slider;
 import com.keyman.engine.KeyboardPickerActivity;
 import com.keyman.engine.KMManager;
 import com.keyman.engine.ModelPickerActivity;
@@ -44,7 +46,8 @@ public final class LanguageSettingsActivity extends AppCompatActivity {
   private static Toolbar toolbar = null;
   private static ListView listView = null;
   private static TextView lexicalModelTextView = null;
-  private static TextView correctionsTextView = null;
+  private static TextView sliderTextView = null;
+  private static Slider slider = null;
   private static SwitchCompat correctionsToggle = null;
   private ImageButton addButton = null;
   private String associatedLexicalModel = "";
@@ -139,16 +142,41 @@ public final class LanguageSettingsActivity extends AppCompatActivity {
 
     FilteredKeyboardsAdapter adapter = new FilteredKeyboardsAdapter(context, KeyboardPickerActivity.getInstalledDataset(context), lgCode);
 
-    // The following two layouts/toggles will need to link with these objects.
+    // The following slider corresponds to three prediction/correction toggles
     Context appContext = this.getApplicationContext();
     prefs = appContext.getSharedPreferences(appContext.getString(R.string.kma_prefs_name), Context.MODE_PRIVATE);
     boolean mayPredict = prefs.getBoolean(KMManager.getLanguagePredictionPreferenceKey(lgCode), true);
     boolean mayCorrect = prefs.getBoolean(KMManager.getLanguageCorrectionPreferenceKey(lgCode), true);
+    boolean mayAutoCorrect = prefs.getBoolean(KMManager.getLanguageAutoCorrectionPreferenceKey(lgCode), true);
 
-    RelativeLayout layout = (RelativeLayout)findViewById(R.id.corrections_toggle);
+    RelativeLayout layout = (RelativeLayout)findViewById(R.id.predictions_corrections_slider);
 
-    correctionsTextView = (TextView) layout.findViewById(R.id.text1);
-    correctionsTextView.setText(getString(R.string.enable_corrections));
+    sliderTextView = (TextView) layout.findViewById(R.id.text1);
+    sliderTextView.setText(determineSliderText(mayPredict, mayCorrect, mayAutoCorrect));
+
+    slider = (Slider) findViewById(R.id.slider);
+    slider.setValue(suggestToValue(mayPredict, mayCorrect, mayAutoCorrect));
+    slider.addOnChangeListener(new Slider.OnChangeListener() {
+
+      @Override
+      public void onValueChange(Slider slider, float progress, boolean fromUser) {
+        // Update the text field based on the slider value.
+        String text = getString(R.string.no_predictive_text);
+        if (progress == 0.0f) {
+          text = getString(R.string.no_predictive_text);
+        } else if (progress == 1.0f) {
+          text = getString(R.string.predictions_only);
+        } else if (progress == 2.0f) {
+          text = getString(R.string.offer_corrections_too);
+        } else {
+          text = getString(R.string.offer_auto_corrections);
+        }
+
+        sliderTextView.setText(text);
+      }
+    });
+
+    /*
     correctionsToggle = layout.findViewById(R.id.toggle);
     correctionsToggle.setChecked(mayCorrect); // Link to persistent option storage!  Also needs handler.
     String prefsKey = KMManager.getLanguageCorrectionPreferenceKey(lgCode);
@@ -164,6 +192,7 @@ public final class LanguageSettingsActivity extends AppCompatActivity {
     predictionsToggle.setOnClickListener(new PreferenceToggleListener(prefsKey, lgCode));
 
     overrideCorrectionsToggle(mayPredict);
+  */
 
     layout = (RelativeLayout)findViewById(R.id.model_picker);
     textView = (TextView) layout.findViewById(R.id.text1);
@@ -305,6 +334,7 @@ public final class LanguageSettingsActivity extends AppCompatActivity {
    *     When false, disables corrections toggle and text field, and makes corrections toggle invisible
    */
   private void overrideCorrectionsToggle(boolean override) {
+    /*
     if (correctionsTextView != null) {
       correctionsTextView.setEnabled(override);
     }
@@ -313,6 +343,37 @@ public final class LanguageSettingsActivity extends AppCompatActivity {
       int visibility = override ? View.VISIBLE : View.INVISIBLE;
       correctionsToggle.setVisibility(visibility);
     }
+     */
+  }
+
+  private String determineSliderText(boolean mayPredict, boolean mayCorrect, boolean mayAutoCorrect) {
+    if (!mayPredict) {
+      return getString(R.string.no_predictive_text);
+    }
+
+    // Predictions enabled, so string depends on correction toggles
+    if (!mayCorrect) {
+      return getString(R.string.predictions_only);
+    }
+
+    return (mayAutoCorrect) ?
+      getString(R.string.offer_auto_corrections) :
+      getString(R.string.offer_corrections_too);
+  }
+
+  private Float suggestToValue(boolean mayPredict, boolean mayCorrect, boolean mayAutoCorrect) {
+    if (!mayPredict) {
+      return 0.0f;
+    }
+
+    if (!mayCorrect) {
+      return 1.0f;
+    }
+
+    return (mayAutoCorrect) ?
+      3.0f :
+      2.0f;
+
   }
 
   // Fully details the building of this Activity's list view items.

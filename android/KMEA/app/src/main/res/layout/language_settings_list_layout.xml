@@ -61,6 +61,12 @@
             android:background="?attr/colorAccent" />
 
         <include
+            android:id="@+id/predictions_corrections_slider"
+            layout="@layout/list_row_layout6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--include
             android:id="@+id/predictions_toggle"
             layout="@layout/list_row_layout4"
             android:layout_width="match_parent"
@@ -70,7 +76,7 @@
             android:id="@+id/corrections_toggle"
             layout="@layout/list_row_layout4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" /-->
 
         <include
             android:id="@+id/model_picker"

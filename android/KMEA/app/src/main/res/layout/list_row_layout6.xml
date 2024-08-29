@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/list_item">
+
+    <LinearLayout
+        android:background="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" >
+
+        <!-- Slider range 0 to 3 corresponds to prediction/correction toggles -->
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/SliderStyle"
+
+            android:stepSize="1"
+            android:valueFrom="0"
+            android:valueTo="3"/>
+
+        <TextView
+          android:id="@+id/text1"
+          android:background="@android:color/transparent"
+          android:textColor="@drawable/textview_item"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="30dp"
+          android:layout_marginBottom="15dp"
+          android:textSize="16sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

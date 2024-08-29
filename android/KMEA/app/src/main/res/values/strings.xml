@@ -211,11 +211,18 @@
     <!-- Context: Language Settings Keyboard uninstall strings -->
     <string name="keyboard_deleted_toast" comment="Notification when a keyboard is deleted">Keyboard deleted</string>
 
-    <!-- Context: Language Settings menu strings -->
+    <!-- Context: Language Settings menu strings. Removed in Keyman 18 -->
     <string name="enable_corrections" comment="Enable corrections from the suggestion banner">Enable corrections</string>
 
-    <!-- Context: Language Settings menu strings -->
+    <!-- Context: Language Settings menu strings. Removed in Keyman 18 -->
     <string name="enable_predictions" comment="Enable predictions from the suggestion banner">Enable predictions</string>
+
+    <!-- Context: Language Settings menu strings for predictions/corrections slider -->
+    <string name="predictions_corrections_slider" translatable="false">Predictions correcions slider</string>
+    <string name="no_predictive_text" comment="Suggestion banner disabled">No predictive text</string>
+    <string name="predictions_only" comment="Offer predictions without corrections">Offer predictions only</string>
+    <string name="offer_corrections_too" comment="Offer predictions and corrections">Offer predictions and corrections</string>
+    <string name="offer_auto_corrections" comment="Offer predictions and auto-correct">Offer predictions and auto-correct</string>
 
     <!-- Context: Language Settings menu strings -->
     <string name="model_label">Dictionary</string>
