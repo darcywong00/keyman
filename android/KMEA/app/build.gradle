@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.library'
-    id 'name.remal.default-plugins'
+    //id 'name.remal.default-plugins'
 }
 
 ext.rootPath = '../../'
@@ -10,6 +10,10 @@ android {
     compileSdk 34
     namespace "com.keyman.engine"
 
+    buildFeatures {
+        buildConfig true
+    }
+
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 34
@@ -18,7 +22,7 @@ android {
         buildConfigField "String", "KEYMAN_ENGINE_VERSION_NAME", "\""+VERSION_NAME+"\""
         buildConfigField "String", "VERSION_ENVIRONMENT", "\""+VERSION_ENVIRONMENT+"\""
 
-        // Sepcify library filename keyman-engine-$CONFIG.aar
+        // Specify library filename keyman-engine-$CONFIG.aar
         setProperty("archivesBaseName", "keyman-engine")
     }
 

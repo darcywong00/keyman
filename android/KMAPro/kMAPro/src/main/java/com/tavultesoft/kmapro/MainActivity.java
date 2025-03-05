@@ -46,6 +46,7 @@ import com.keyman.engine.util.KMString;
 import com.keyman.engine.util.WebViewUtils;
 import com.keyman.engine.util.WebViewUtils.EngineWebViewVersionStatus;
 import com.keyman.engine.util.WebViewUtils.SystemWebViewStatus;
+import com.tavultesoft.kmapro.R;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -432,6 +433,7 @@ public class MainActivity extends BaseActivity implements OnKeyboardEventListene
     return true;
   }
 
+  @SuppressLint("NonConstantResourceId")
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
