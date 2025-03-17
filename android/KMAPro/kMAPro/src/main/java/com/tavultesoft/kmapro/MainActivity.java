@@ -128,6 +128,7 @@ public class MainActivity extends BaseActivity implements OnKeyboardEventListene
   private Toolbar toolbar;
   private Menu menu;
 
+  private static int currentHeight = 0;
   private static Dataset repo;
   private boolean didExecuteParser = false;
 
@@ -157,7 +158,7 @@ public class MainActivity extends BaseActivity implements OnKeyboardEventListene
 
     // Verify WebView installed and enabled before attempting to initialize KMManager
     KMManager.initialize(getApplicationContext(), KeyboardType.KEYBOARD_TYPE_INAPP);
-
+    currentHeight = KMManager.getKeyboardHeight(context);
     KMManager.executeResourceUpdate(this);
 
     DefaultLanguageResource.install(context);
@@ -691,6 +692,18 @@ public class MainActivity extends BaseActivity implements OnKeyboardEventListene
         textSize = progress + minTextSize;
         textView.setTextSize((float) textSize);
         dialog.setTitle(getTextSizeString());
+
+        // Adjust keyboard height (assuming portrait for this)
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.kma_prefs_name), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(KMManager.KMKey_KeyboardHeightPortrait, currentHeight);
+        editor.commit();
+
+        int defaultHeight = (int) context.getResources().getDimension(R.dimen.keyboard_height);
+        currentHeight = defaultHeight + 5*(progress-16);
+        currentHeight = Math.max(defaultHeight/2, currentHeight);
+        currentHeight = Math.min(defaultHeight*2, currentHeight);
+        KMManager.applyKeyboardHeight(context, currentHeight);
       }
     });
 
