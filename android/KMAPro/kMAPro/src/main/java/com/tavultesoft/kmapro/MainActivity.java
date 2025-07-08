@@ -61,6 +61,7 @@ import android.os.Parcelable;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -86,6 +87,10 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import android.provider.Settings;
 import android.text.Html;
@@ -102,6 +107,7 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -137,7 +143,10 @@ public class MainActivity extends BaseActivity implements OnKeyboardEventListene
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     setTheme(R.style.AppTheme);
+    //WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
     super.onCreate(savedInstanceState);
+    EdgeToEdge.enable(this);
+
     context = this;
 
     checkSendCrashReport();
@@ -169,6 +178,21 @@ public class MainActivity extends BaseActivity implements OnKeyboardEventListene
     checkHapticFeedback();
 
     setContentView(R.layout.activity_main);
+    RelativeLayout topRelativeLayout = (RelativeLayout)findViewById(R.id.topRelativeLayout);
+
+    ViewCompat.setOnApplyWindowInsetsListener(topRelativeLayout, (v, windowInsets) -> {
+      Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+      // Apply the insets as a margin to the view
+      ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+      mlp.topMargin = insets.top;
+      mlp.leftMargin = insets.left;
+      mlp.rightMargin = insets.right;
+      v.setLayoutParams(mlp);
+
+      // Return CONSUMED if you don't want the window insets to keep passing
+      // down to descendant views.
+      return WindowInsetsCompat.CONSUMED;
+    });
 
     toolbar = (Toolbar) findViewById(R.id.titlebar);
     setSupportActionBar(toolbar);
