@@ -187,6 +187,7 @@ public class MainActivity extends BaseActivity implements OnKeyboardEventListene
       mlp.topMargin = insets.top;
       mlp.leftMargin = insets.left;
       mlp.rightMargin = insets.right;
+      mlp.bottomMargin = insets.bottom; //?
       v.setLayoutParams(mlp);
 
       // Return CONSUMED if you don't want the window insets to keep passing
