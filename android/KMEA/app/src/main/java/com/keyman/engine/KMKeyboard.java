@@ -40,6 +40,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
@@ -53,6 +54,10 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import io.sentry.Breadcrumb;
 import io.sentry.Sentry;
@@ -123,6 +128,21 @@ final class KMKeyboard extends WebView {
     this.context = context;
     this.keyboardType = KeyboardType.KEYBOARD_TYPE_INAPP;
     initKMKeyboard(context);
+
+    /*
+    ViewCompat.setOnApplyWindowInsetsListener(this, (v, windowInsets) -> {
+      Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+      // Apply the insets as a margin to the view
+      ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+      mlp.bottomMargin = insets.bottom;
+      v.setLayoutParams(mlp);
+
+      // Return CONSUMED if you don't want the window insets to keep passing
+      // down to descendant views.
+      return WindowInsetsCompat.CONSUMED;
+    });
+
+     */
   }
 
   /**
