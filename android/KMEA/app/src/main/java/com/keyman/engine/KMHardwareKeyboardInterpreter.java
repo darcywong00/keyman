@@ -5,8 +5,14 @@
 package com.keyman.engine;
 
 import com.keyman.engine.KMScanCodeMap;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.KeyEvent;
+import android.view.inputmethod.ExtractedText;
+import android.view.inputmethod.ExtractedTextRequest;
+import android.view.inputmethod.InputConnection;
 
 public class KMHardwareKeyboardInterpreter implements KeyEvent.Callback {
 
@@ -55,10 +61,44 @@ public class KMHardwareKeyboardInterpreter implements KeyEvent.Callback {
     Lstates |= numOn ? KMModifierCodes.get("NUM_LOCK") : KMModifierCodes.get("NO_NUM_LOCK");
     Lstates |= scrollOn ? KMModifierCodes.get("SCROLL_LOCK") : KMModifierCodes.get("NO_SCROLL_LOCK");
 
-    // CTRL-Tab triggers the Keyman language menu
-    if (keyCode == KeyEvent.KEYCODE_TAB && ((androidModifiers & KeyEvent.META_CTRL_ON) != 0)) {
-      KMManager.showKeyboardPicker(context, keyboardType);
-      return false;
+    // Limited CTRL Hotkeys
+    if (((androidModifiers & KeyEvent.META_CTRL_ON) != 0) && (context != null)) {
+      switch (keyCode) {
+        case KeyEvent.KEYCODE_TAB :
+          // CTRL-Tab triggers the Keyman language menu
+          KMManager.showKeyboardPicker(context, keyboardType);
+          return false;
+
+        case KeyEvent.KEYCODE_C :
+          // Ctrl-C copy selected text to clipboard
+          InputConnection ic = KMManager.getInputConnection(keyboardType);
+          if (ic == null) {
+            // current active InputConnection is no longer bound to the Keyman Engine input method
+            // (user switched to another IME) so disregard the keystroke.
+            // https://developer.android.com/reference/android/inputmethodservice/InputMethodService#getCurrentInputConnection()
+            return false;
+          }
+          CharSequence charSequence = ic.getSelectedText(0);
+          if (charSequence != null) { // This can be null if the input connection becomes invalid.
+            String str = charSequence.toString();
+            ClipboardManager clipboard = (ClipboardManager) (context.getSystemService(Context.CLIPBOARD_SERVICE));
+            ClipData clip = ClipData.newPlainText("selected text", str);
+
+            // TODO: notify
+            return false;
+          }
+          // No selected text, so do nothing and continue
+          break;
+
+        case KeyEvent.KEYCODE_V :
+          // Ctrl-V to paste clipboard contents
+          // TODO
+          break;
+
+        default:
+          // Do nothing, continue
+          break;
+      }
     }
 
     // Range check scanCode. If it's beyond our expected range, just use "0"
